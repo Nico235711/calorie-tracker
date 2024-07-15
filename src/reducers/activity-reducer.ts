@@ -29,48 +29,42 @@ export const activityReducer = (
   state: ActivityState = initialState,
   action: ActivityActions
 ) => {
-  if (action.type === "save-activity") {
+  switch (action.type) {
+    case "save-activity":
+      let updatedActivities: Activity[] = []
+      // este código maneja la lógica para actualizar el state
+      if (state.activeId) { // editando registro
+        updatedActivities = state.activities.map(activity => activity.id === state.activeId ? action.payload.newActivity : activity)
 
-    let updatedActivities: Activity[] = []
-    // este código maneja la lógica para actualizar el state
-    if (state.activeId) { // editando registro
-      updatedActivities = state.activities.map(activity => activity.id === state.activeId ? action.payload.newActivity : activity)
+      } else { // nuevo registro
+        updatedActivities = [...state.activities, action.payload.newActivity]
 
-    } else { // nuevo registro
-      updatedActivities = [...state.activities, action.payload.newActivity]
+      }
+      // retorno del estado acualizado      
+      return {
+        ...state,
+        activities: updatedActivities,
+        activeId: ""
+      }
+    case "set-activeId":
+      return {
+        ...state,
+        activeId: action.payload.id
+      }
+    case "remove-activity":
+      // retorno del estado actualizado
+      return {
+        ...state,
+        activities: state.activities.filter(stateActivity => stateActivity.id !== action.payload.id),
+        activeId: ""
+      }
+    case "restart-app":
+
+      return {
+        activities: [],
+        activeId: ""
+      }
+    default:
+      return state
     }
-
-    // retorno del estado actualizado
-    return {
-      ...state,
-      activities: updatedActivities,
-      activeId: ""
-    }
-  }
-
-  if (action.type === "set-activeId") {
-    return {
-      ...state,
-      activeId: action.payload.id
-    }
-  }
-
-  if (action.type === "remove-activity") {
-
-    // retorno del estado actualizado
-    return {
-      ...state,
-      activities: state.activities.filter(stateActivity => stateActivity.id !== action.payload.id)
-    }
-  }
-
-  if (action.type === "restart-app") {
-
-    return {
-      activities: [],
-      activeId: ""
-    }
-  }
-
-  return state
 }
