@@ -15,8 +15,8 @@ const CalorieTracker = ({ activities } : CalorieTrackerProps) => {
 
   return (
     <>
-      <h2 className="text-center text-white text-3xl font-black">Resumen de Calorías</h2>
-      <div className="flex flex-col items-center md:flex-row md:justify-between  mt-4">
+      <h2 className="text-center md:ml-[60px] text-white text-3xl font-black">Resumen de Calorías</h2>
+      <div className="flex flex-col items-center md:flex-row md:justify-around mt-4">
         <CaloriesResume 
           calories={caloriesConsumed}
           text="Calorías Consumidas"
