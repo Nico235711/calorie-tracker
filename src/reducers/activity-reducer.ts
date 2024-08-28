@@ -2,11 +2,11 @@ import { Activity } from "../types"
 
 // acciones quee describen que esta pasando en la app
 export type ActivityActions =
-  { type: "save-activity", payload: { newActivity: Activity } } |
-  { type: "set-activeId", payload: { id: Activity["id"] } } |
-  { type: "remove-activity", payload: { id: Activity["id"] } } |
-  { type: "restart-app" }
-
+  | { type: "save-activity", payload: { newActivity: Activity } } 
+  | { type: "set-activeId", payload: { id: Activity["id"] } } 
+  | { type: "remove-activity", payload: { id: Activity["id"] } } 
+  | { type: "restart-app" }
+  
 export type ActivityState = {
   activities: Activity[],
   activeId: Activity["id"]

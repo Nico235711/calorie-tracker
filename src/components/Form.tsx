@@ -1,9 +1,9 @@
 import { ChangeEvent, Dispatch, FormEvent, useEffect, useState } from "react"
-import { v4 as uuidv4 } from 'uuid'
 
 import { categories } from "../data/categories"
-import { Activity } from "../types"
 import { ActivityActions, ActivityState, } from "../reducers/activity-reducer"
+import { Activity } from "../types"
+import { v4 as uuidv4 } from 'uuid'
 
 type FormProps = {
   state: ActivityState
@@ -17,8 +17,7 @@ const initialState : Activity = {
   calories: 0
 }
 
-const Form = ({ state, dispatch } : FormProps) => {
-
+const Form = ({ state, dispatch }: FormProps) => {
   const [activity, setActivity] = useState<Activity>(initialState)
 
   useEffect(() => {
@@ -29,18 +28,18 @@ const Form = ({ state, dispatch } : FormProps) => {
     }
   }, [state.activeId]);
 
-  const handleChange = (e : ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
 
-    const isNumberField = ["category", "calories"].includes(e.target.id)    
+    const isNumberField = ["category", "calories"].includes(e.target.id)
 
     // convierte un campo especifico a número
     setActivity({
       ...activity,
-      [e.target.id] : isNumberField ? +e.target.value : e.target.value
+      [e.target.id]: isNumberField ? +e.target.value : e.target.value
     })
   }
 
-  const handleSubmit = (e : FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     // disparo mi acción
@@ -57,7 +56,7 @@ const Form = ({ state, dispatch } : FormProps) => {
     })
   }
 
-  const isValidActivity = () => {  
+  const isValidActivity = () => {
     const { name, calories } = activity
     // trim() elimina los espacios al principio y al final
     return name.trim() !== "" && calories > 0
@@ -65,7 +64,7 @@ const Form = ({ state, dispatch } : FormProps) => {
 
   return (
     <form
-      className="rounded-lg shadow space-y-5 bg-white p-10"
+      className="p-10 space-y-5 bg-white rounded-lg shadow"
       onSubmit={handleSubmit}
     >
       <div className="grid grid-cols-1 gap-3">
@@ -73,7 +72,7 @@ const Form = ({ state, dispatch } : FormProps) => {
         <select
           name="category"
           id="category"
-          className="border-2 border-slate-200 p-2 rounded-lg"
+          className="p-2 border-2 rounded-lg border-slate-200"
           value={activity.category}
           onChange={handleChange}
         >
@@ -84,27 +83,27 @@ const Form = ({ state, dispatch } : FormProps) => {
           }
         </select>
       </div>
-      
+
       <div className="grid grid-cols-1 gap-3">
         <label htmlFor="name" className="font-bold">Actividad:</label>
         <input
           type="text"
           name="activity"
-          id="name" 
-          className="border-2 border-slate-200 p-2 rounded-lg"
+          id="name"
+          className="p-2 border-2 rounded-lg border-slate-200"
           placeholder="Ej: manzana, jugo de naranja, ensaldada, bicicleta"
           value={activity.name}
           onChange={handleChange}
         />
       </div>
-      
+
       <div className="grid grid-cols-1 gap-3">
         <label htmlFor="calories" className="font-bold">Calorías:</label>
         <input
           type="text"
           name="calories"
-          id="calories" 
-          className="border-2 border-slate-200 p-2 rounded-lg"
+          id="calories"
+          className="p-2 border-2 rounded-lg border-slate-200"
           placeholder="Ej: 350 o 500 calorías"
           value={activity.calories}
           onChange={handleChange}
@@ -113,8 +112,8 @@ const Form = ({ state, dispatch } : FormProps) => {
 
       <input
         type="submit"
-        value={activity.category === 1 ? "Guardar Comida" : "Guardar Ejercicio"} 
-        className="bg-gray-800 w-full py-2 text-white uppercase text-lg font-bold cursor-pointer rounded-lg disabled:opacity-10"
+        value={activity.category === 1 ? "Guardar Comida" : "Guardar Ejercicio"}
+        className="w-full py-2 text-lg font-bold text-white uppercase bg-gray-800 rounded-lg cursor-pointer disabled:opacity-10"
         disabled={!isValidActivity()}
       />
     </form>
