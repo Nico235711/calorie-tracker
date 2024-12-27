@@ -1,11 +1,12 @@
 import { Activity } from "../types"
+import { REMOVE_ACTIVITY, RESTART_APP, SET_ACTIVE_ID, SAVE_ACTIVITY } from './actions'
 
 // acciones quee describen que esta pasando en la app
 export type ActivityActions =
-  | { type: "save-activity", payload: { newActivity: Activity } } 
-  | { type: "set-activeId", payload: { id: Activity["id"] } } 
-  | { type: "remove-activity", payload: { id: Activity["id"] } } 
-  | { type: "restart-app" }
+  | { type: typeof SAVE_ACTIVITY, payload: { newActivity: Activity } } 
+  | { type: typeof SET_ACTIVE_ID, payload: { id: Activity["id"] } } 
+  | { type: typeof REMOVE_ACTIVITY, payload: { id: Activity["id"] } } 
+  | { type: typeof RESTART_APP }
   
 export type ActivityState = {
   activities: Activity[],
@@ -30,7 +31,7 @@ export const activityReducer = (
   action: ActivityActions
 ) => {
   switch (action.type) {
-    case "save-activity":
+    case "SAVE_ACTIVITY":
       let updatedActivities: Activity[] = []
       // este código maneja la lógica para actualizar el state
       if (state.activeId) { // editando registro
@@ -46,19 +47,19 @@ export const activityReducer = (
         activities: updatedActivities,
         activeId: ""
       }
-    case "set-activeId":
+    case "SET_ACTIVE_ID":
       return {
         ...state,
         activeId: action.payload.id
       }
-    case "remove-activity":
+    case "REMOVE_ACTIVITY":
       // retorno del estado actualizado
       return {
         ...state,
         activities: state.activities.filter(stateActivity => stateActivity.id !== action.payload.id),
         activeId: ""
       }
-    case "restart-app":
+    case "RESTART_APP":
 
       return {
         activities: [],

@@ -3,11 +3,13 @@ import Form from "./components/Form"
 import { activityReducer, initialState } from "./reducers/activity-reducer"
 import ActivityList from "./components/ActivityList"
 import CalorieTracker from "./components/CalorieTracker"
+import { useActivityActions } from "./hooks/useActivityActions"
 
 function App() {
 
   const [state, dispatch] = useReducer(activityReducer, initialState)
   const canRestartApp = useMemo(() => state.activities.length > 0, [state.activities])
+  const { restarApp, setActiveId, removeActivity } = useActivityActions(dispatch)
   
   // Almacenando las actividades en LocalStorage
   useEffect(() => {
@@ -23,7 +25,7 @@ function App() {
           <button
             className="p-3 text-lg text-white uppercase transition-all bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-900 disabled:opacity-40"
             disabled={!canRestartApp}
-            onClick={() => dispatch({ type: "restart-app" })}
+            onClick={restarApp}
           >
             Resetear App
           </button>
@@ -50,7 +52,8 @@ function App() {
       <section className="max-w-4xl p-10 mx-auto">
         <ActivityList 
           activities={state.activities}
-          dispatch={dispatch}
+          setActiveId={setActiveId}
+          removeActivity={removeActivity}
         />
       </section>
     </> 

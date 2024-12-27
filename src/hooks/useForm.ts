@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, FormEvent, useEffect, useState } from "react";
 import { Activity } from "../types";
 import { ActivityActions, ActivityState } from "../reducers/activity-reducer";
 import { v4 as uuidv4 } from 'uuid';
+import { SAVE_ACTIVITY } from "../reducers/actions";
 
 const initialState: Activity = {
   id: uuidv4(),
@@ -20,6 +21,7 @@ export const useForm = (state: ActivityState, dispatch: Dispatch<ActivityActions
       // const selectedActivity = state.activities.filter(stateActivity => stateActivity.id === state.activeId)[0]
       const selectedActivity = state.activities.find(stateActivity => stateActivity.id === state.activeId)
       if (selectedActivity) setActivity(selectedActivity)
+      return () => setActivity(initialState)
     }
   }, [state.activeId]);
 
@@ -39,7 +41,7 @@ export const useForm = (state: ActivityState, dispatch: Dispatch<ActivityActions
 
     // disparo mi acción
     dispatch({
-      type: "save-activity",
+      type: SAVE_ACTIVITY,
       payload: {
         newActivity: activity
       }

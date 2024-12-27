@@ -1,15 +1,15 @@
-import { Dispatch, useMemo } from "react"
+import { useMemo } from "react"
 import { categories } from "../data/categories"
 import { Activity } from "../types"
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { ActivityActions } from "../reducers/activity-reducer"
 
 type ActivityListProps = {
   activities: Activity[]
-  dispatch: Dispatch<ActivityActions>
+  setActiveId: (activityId: Activity["id"]) => void
+  removeActivity: (activityId: Activity["id"]) => void
 }
 
-const ActivityList = ({ activities, dispatch } : ActivityListProps) => {
+const ActivityList = ({ activities, setActiveId, removeActivity }:  ActivityListProps) => {
 
   const categoryName = useMemo(
     () => (category : Activity["category"]) => categories.map(cat => cat.id === category ? cat.name : ""), [activities])
@@ -31,19 +31,13 @@ const ActivityList = ({ activities, dispatch } : ActivityListProps) => {
               </div>
   
               <div className="flex gap-5 items-center">
-                <button onClick={() => dispatch({
-                    type: "set-activeId",
-                    payload: { id: activity.id }
-                  })}
+                <button onClick={() => setActiveId(activity.id)}
                 >
                   <PencilSquareIcon 
                     className="h-8 w-8 text-green-500"
                   />
                 </button>
-                <button onClick={() => dispatch({
-                    type: "remove-activity",
-                    payload: { id: activity.id }
-                  })}
+                <button onClick={() => removeActivity(activity.id)}
                 >
                   <TrashIcon 
                     className="h-8 w-8 text-red-500"

@@ -1,0 +1,4 @@
+export const SAVE_ACTIVITY = "SAVE_ACTIVITY"
+export const SET_ACTIVE_ID = "SET_ACTIVE_ID"
+export const REMOVE_ACTIVITY = "REMOVE_ACTIVITY"
+export const RESTART_APP = "RESTART_APP"
