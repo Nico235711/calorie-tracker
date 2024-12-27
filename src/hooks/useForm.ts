@@ -17,8 +17,9 @@ export const useForm = (state: ActivityState, dispatch: Dispatch<ActivityActions
   useEffect(() => {
     if (state.activeId) {
       // obtengo la actividad con el mismo id
-      const selectedActivity = state.activities.filter(stateActivity => stateActivity.id === state.activeId)[0]
-      setActivity(selectedActivity)
+      // const selectedActivity = state.activities.filter(stateActivity => stateActivity.id === state.activeId)[0]
+      const selectedActivity = state.activities.find(stateActivity => stateActivity.id === state.activeId)
+      if (selectedActivity) setActivity(selectedActivity)
     }
   }, [state.activeId]);
 
