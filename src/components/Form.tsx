@@ -1,14 +1,20 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, type Dispatch, type FormEvent } from "react";
 import { categories } from "../data/categories";
 import type { Activity } from "../types";
+import type { ActivityActions } from "../reducers/activityReducer";
 
-const initialActivity = {
+const initialActivity: Activity = {
+  id: crypto.randomUUID(),
   category: 1,
   name: "",
   calories: 0
 }
 
-export default function Form() {
+type FormProps = {
+  dispatch: Dispatch<ActivityActions>
+}
+
+export default function Form({ dispatch }: FormProps) {
   const [activity, setActivity] = useState<Activity>(initialActivity);
   const handleChange = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
     const isNumberField = ["category", "calories"].includes(e.target.name)
@@ -18,11 +24,16 @@ export default function Form() {
       })
   }
 
-  const handleSumbit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSumbit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (Object.values(activity).includes("")) {
       
     }
+    dispatch({ type: "save-activity", payload: { newActivity: activity } })
+    setActivity({
+      ...initialActivity,
+      id: crypto.randomUUID()
+    })
   }
 
   const isValidActivity = () => {
@@ -31,7 +42,10 @@ export default function Form() {
   }
 
   return (
-    <form className="space-y-5 bg-white shadow rounded-lg p-10">
+    <form
+      className="space-y-5 bg-white shadow rounded-lg p-10"
+      onSubmit={handleSumbit}
+    >
       <div className="grid grid-cols-1 gap-2">
         <label
           htmlFor="category"
@@ -83,8 +97,9 @@ export default function Form() {
       </div>
       <input
         type="submit"
-        value="Guardar comida o Guardar ejercicio"
-        className="bg-gray-800 w-full text-white text-lg py-3 capitalize font-semibold hover:bg-gray-900 transition-all"
+        value={activity.category === 1 ? "Guardar Comida" : "Guardar Ejercicio"}
+        className="bg-gray-800 w-full text-white text-lg py-3 capitalize font-semibold hover:bg-gray-900 transition-all disabled:opacity-20"
+        disabled={!isValidActivity()}
       />
     </form>
   )
