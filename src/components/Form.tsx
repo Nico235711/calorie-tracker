@@ -1,7 +1,7 @@
-import { useState, type ChangeEvent, type Dispatch, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type Dispatch, type FormEvent } from "react";
 import { categories } from "../data/categories";
 import type { Activity } from "../types";
-import type { ActivityActions } from "../reducers/activityReducer";
+import type { ActivityActions, ActivityState } from "../reducers/activityReducer";
 
 const initialActivity: Activity = {
   id: crypto.randomUUID(),
@@ -12,10 +12,19 @@ const initialActivity: Activity = {
 
 type FormProps = {
   dispatch: Dispatch<ActivityActions>
+  state: ActivityState
 }
 
-export default function Form({ dispatch }: FormProps) {
+export default function Form({ dispatch, state }: FormProps) {
   const [activity, setActivity] = useState<Activity>(initialActivity);
+
+  useEffect(() => {
+    if (state.activeId) {
+      const selectedActivity = state.activities.find(stateActivity => state.activeId === stateActivity.id)
+      if (selectedActivity) setActivity(selectedActivity)
+    }
+  }, [state.activeId]);
+  
   const handleChange = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
     const isNumberField = ["category", "calories"].includes(e.target.name)
       setActivity({
@@ -26,9 +35,6 @@ export default function Form({ dispatch }: FormProps) {
 
   const handleSumbit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (Object.values(activity).includes("")) {
-      
-    }
     dispatch({ type: "save-activity", payload: { newActivity: activity } })
     setActivity({
       ...initialActivity,
